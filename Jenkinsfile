@@ -17,13 +17,26 @@ pipeline {
             sh(script: 'docker compose up -d')
          }
       }
+      stage('Run Tests') {
+         steps {
+            sh(script: 'pytest ./tests/test_sample.py')
+         }
+         post {
+            success {
+               echo "Tests passed! :)"
+            }
+            failure {
+               echo "Tests failed :("
+            }
+         }
+      }
       stage('Docker Push') {
          steps {
-            echo "Running in $WORKSPACE"
-            dir ("$WORKSPACE/azure-vote") {
+            echo "Runnning in $WORKSPACE"
+            dir("$WORKSPACE/azure-vote") {
                script {
                   docker.withRegistry('', 'dockerhub') {
-                     def image = docker.build("gators/jenkins-course:2024")
+                     def image = docker.build('gators/jenkins-course:2023')
                      image.push()
                   }
                }
