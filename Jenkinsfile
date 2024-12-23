@@ -23,10 +23,7 @@ pipeline {
       }
       stage('Run Tests') {
          steps {
-            script {
-               def containerId = sh(script: "docker ps -q -f name=<container_name>", returnStdout: true).trim()
-               sh(script: "docker exec ${containerId} pytest /app/tests/test_sample.py")
-            }
+            sh(script: 'pytest ./tests/test_sample.py')
          }
          post {
             success {
