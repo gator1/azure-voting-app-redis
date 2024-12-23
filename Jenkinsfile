@@ -1,6 +1,8 @@
 pipeline {
    agent any
-
+   environment {
+      DOCKER_HOST = 'unix:///Users/guangsongxia/.docker/run/docker.sock'
+   }
    stages {
       stage('Verify Branch') {
          steps {
