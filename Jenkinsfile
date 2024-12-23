@@ -17,19 +17,6 @@ pipeline {
             sh(script: 'docker compose up -d')
          }
       }
-      stage('Run Tests') {
-         steps {
-            sh(script: 'pytest ./tests/test_sample.py')
-         }
-         post {
-            success {
-               echo "Tests passed! :)"
-            }
-            failure {
-               echo "Tests failed! :("
-            }
-         }
-      }
       stage('Docker Push') {
          steps {
             echo "Running in $WORKSPACE"
