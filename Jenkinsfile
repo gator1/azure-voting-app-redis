@@ -1,5 +1,9 @@
 pipeline {
    agent any
+   
+   environment {
+      DOCKER_HOST = 'unix:///Users/guangsongxia/.docker/run/docker.sock'
+   }
 
    stages {
       stage('Verify Branch') {
@@ -19,14 +23,17 @@ pipeline {
       }
       stage('Run Tests') {
          steps {
-            sh(script: 'pytest ./tests/test_sample.py')
+            script {
+               def containerId = sh(script: "docker ps -q -f name=<container_name>", returnStdout: true).trim()
+               sh(script: "docker exec ${containerId} pytest /app/tests/test_sample.py")
+            }
          }
          post {
             success {
                echo "Tests passed! :)"
             }
             failure {
-               echo "Tests failed! :("
+               echo "Tests failed :("
             }
          }
       }
