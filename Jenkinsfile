@@ -32,6 +32,19 @@ pipeline {
             }
          }
       }
+      stage('Run Grype') {
+         steps {
+            grypeScan autoInstall: false, repName: 'grypeReport_${JOB_NAME}_${BUILD_NUMBER}.txt', scanDest: 'registry:gators/jenkins-course:2023'
+         }
+         post {
+            always {
+               recordIssues(
+                  tools: [grype()],
+                  aggregatingResults: true,
+               )
+            }
+         }
+      }
    }
    post {
       always {
